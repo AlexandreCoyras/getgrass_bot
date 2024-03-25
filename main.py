@@ -78,8 +78,8 @@ async def main():
     try:
         with open('config.json', 'r') as f:
             config_file = json.load(f)
-            config.user_id = config_file.user_id
-            for c in config_file.proxies:
+            config.user_id = config_file['user_id']
+            for c in config_file['proxies']:
                 config.proxies.append(c)
     except FileNotFoundError:
         logger.error('config file is not exist')
