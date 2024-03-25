@@ -73,10 +73,14 @@ async def connect_to_wss(socks5_proxy, user_id):
 
 async def main():
     # TODO 修改user_id
-    _user_id = 'user_id'
-    # TODO 修改代理列表
+    if len(sys.argv) < 3:
+        logger.error('please add user_id and proxy arguments')
+        return
+    _user_id = sys.argv[1]
+    # TODO
     socks5_proxy_list = [
-        'socks5://user:pwd@ip:port',
+            sys.argv[2]
+#         'socks5://user:pwd@ip:port',
     ]
     tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in socks5_proxy_list]
     await asyncio.gather(*tasks)
