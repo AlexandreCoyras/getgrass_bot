@@ -7,6 +7,7 @@ import asyncio
 import random
 import ssl
 import json
+import sys
 import time
 import uuid
 from loguru import logger
@@ -72,20 +73,26 @@ async def connect_to_wss(socks5_proxy, user_id):
 
 
 async def main():
-    # TODO 修改user_id
-    if len(sys.argv) < 3:
-        logger.error('please add user_id and proxy arguments')
+    config = {
+    user_id: '',
+    'proxies': []
+    }
+
+    try:
+        with open('config.json', 'r') as f:
+            configFile = json.load(f)
+            config.user_id = configFile.user_id
+            for c in configFile.proxies:
+                config.proxies.append(c)
+    except FileNotFoundError:
+        logger.error('config file is not exist')
         return
-    _user_id = sys.argv[1]
-    # TODO
-    socks5_proxy_list = [
-            sys.argv[2]
-#         'socks5://user:pwd@ip:port',
-    ]
+    if len(configs) == 0:
+        logger.error('config file is empty')
+        return
     tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in socks5_proxy_list]
     await asyncio.gather(*tasks)
 
 
 if __name__ == '__main__':
-    # # 运行主函数
     asyncio.run(main())
