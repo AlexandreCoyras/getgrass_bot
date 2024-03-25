@@ -73,24 +73,21 @@ async def connect_to_wss(socks5_proxy, user_id):
 
 
 async def main():
-    config = {
-    user_id: '',
-    'proxies': []
-    }
+    config = type('config', (object,), {'proxies': [], 'user_id': ''})()
 
     try:
         with open('config.json', 'r') as f:
-            configFile = json.load(f)
-            config.user_id = configFile.user_id
-            for c in configFile.proxies:
+            config_file = json.load(f)
+            config.user_id = config_file.user_id
+            for c in config_file.proxies:
                 config.proxies.append(c)
     except FileNotFoundError:
         logger.error('config file is not exist')
         return
-    if len(configs) == 0:
-        logger.error('config file is empty')
+    if len(config.proxies) == 0:
+        logger.error('proxies is empty')
         return
-    tasks = [asyncio.ensure_future(connect_to_wss(i, _user_id)) for i in socks5_proxy_list]
+    tasks = [asyncio.ensure_future(connect_to_wss(i, config.user_id)) for i in config.proxies]
     await asyncio.gather(*tasks)
 
 
