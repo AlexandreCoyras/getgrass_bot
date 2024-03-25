@@ -87,6 +87,7 @@ async def main():
     if len(config.proxies) == 0:
         logger.error('proxies is empty')
         return
+    print("config", config.proxies, config.user_id)
     tasks = [asyncio.ensure_future(connect_to_wss(i, config.user_id)) for i in config.proxies]
     await asyncio.gather(*tasks)
 
