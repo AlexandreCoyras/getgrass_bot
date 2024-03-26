@@ -75,7 +75,7 @@ async def connect_to_wss(socks5_proxy, user_id):
 
 async def main():
     config = type('config', (object,), {'proxies': [], 'user_id': ''})()
-
+    config_path = (len(sys.argv) > 1 and sys.argv[1]) or 'config.json'
     try:
         with open(sys.argv[1] or 'config.json', 'r') as f:
             config_file = json.load(f)
