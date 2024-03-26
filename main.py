@@ -77,7 +77,7 @@ async def main():
     config = type('config', (object,), {'proxies': [], 'user_id': ''})()
 
     try:
-        with open('config.json', 'r') as f:
+        with open(sys.argv[1] or 'config.json', 'r') as f:
             config_file = json.load(f)
             config.user_id = config_file['user_id']
             for c in config_file['proxies']:
