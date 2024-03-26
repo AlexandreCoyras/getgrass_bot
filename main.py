@@ -19,7 +19,7 @@ async def connect_to_wss(socks5_proxy, user_id):
     logger.info(device_id)
     while True:
         try:
-            await asyncio.sleep(random.randint(1, 10) / 10)
+            await asyncio.sleep(random.randint(1, 10) / 5)
             custom_headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
             }
@@ -47,6 +47,7 @@ async def connect_to_wss(socks5_proxy, user_id):
                     response = await websocket.recv()
                     message = json.loads(response)
                     logger.info(message)
+                    logger.info(socks5_proxy)
                     if message.get("action") == "AUTH":
                         auth_response = {
                             "id": message["id"],
